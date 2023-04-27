@@ -1,0 +1,9 @@
+name = "Jammy"
+uuid = "c197c504-bcb4-4b29-96cd-1b47f8009d3d"
+authors = ["Jesse Brown <brownjm@ornl.gov>"]
+version = "0.1.0"
+
+[deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
