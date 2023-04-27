@@ -5,4 +5,5 @@ Simple R-matrix code to demonstrate SAMMY-like cross section calculation in the 
 Notes:
 - s-waves only right now
 - incident neutrons only right now
+- SAMMY is found at: https://code.ornl.gov/RNSD/SAMMY
 

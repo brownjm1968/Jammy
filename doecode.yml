@@ -1,0 +1,49 @@
+---
+code_id: 105662
+open_source: true
+repository_link: "https://github.com/brownjm1968/Jammy"
+project_type: "OS"
+software_type: "S"
+official_use_only: {}
+developers:
+- email: "brownjm1968@gmail.com"
+  orcid: ""
+  first_name: "Jesse"
+  last_name: "Brown"
+  middle_name: ""
+  affiliations:
+  - "Oak Ridge National Laboratory"
+contributors: []
+sponsoring_organizations:
+- organization_name: "USDOE National Nuclear Security Administration (NNSA)"
+  funding_identifiers: []
+  primary_award: "AC05-00OR22725"
+  DOE: true
+contributing_organizations: []
+research_organizations:
+- organization_name: "Oak Ridge National Laboratory (ORNL), Oak Ridge, TN (United\
+    \ States)"
+  DOE: true
+related_identifiers: []
+award_dois: []
+release_date: "2023-04-27"
+software_title: "brownjm1968/Jammy"
+acronym: "Jammy"
+doi: "10.11578/dc.20230427.1"
+description: "Julia language version of the SAMMY R-matrix code"
+programming_languages:
+- "Julia"
+version_number: "0.1.0"
+country_of_origin: "United States"
+licenses:
+- "BSD 3-clause \"New\" or \"Revised\" License"
+recipient_org: "Oak Ridge National Laboratory"
+date_record_added: "2023-04-27"
+date_record_updated: "2023-04-27"
+links:
+- rel: "citation"
+  href: "https://www.osti.gov/doecode/biblio/105662"
+is_migration: false
+is_file_certified: false
+last_editor: "brownjm@ornl.gov"
+is_limited: false
