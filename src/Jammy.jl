@@ -49,9 +49,14 @@ ac = 8.1271  # fermi = 1e-15 m
 sigt,sign,sigx,sigc = Jammy.calcxs(egrid,respars,targetspin,targetmass,projspin,projmass,ac);
 ```
 """ ->
-function calcxs(egrid,respars,targetspin,targetmass,projspin,projmass,ac)
+function calcxs(egrid,respars,targetspin,targetmass,projspin,projmass,ac,bs_approx=false)
     # --- Default setup -----
-    numChan = ncol(respars) - 3
+    notBSA = 1 # B = S approximation
+    if bs_approx 
+        notBSA = 0
+    end
+    skip = 4
+    numChan = ncol(respars) - skip
     numRes  = nrow(respars)
 
     # initialize arrays to zero
@@ -98,33 +103,33 @@ function calcxs(egrid,respars,targetspin,targetmass,projspin,projmass,ac)
                 @rsubset :Jpi == jpi
             end
             numResJpi = nrow(resparsJpi)
-            gJ = (2*jpi+1)/( (2*projspin+1)*(2*targetspin+1) )
+            J = abs(jpi)
+            gJ = (2*J+1)/( (2*projspin+1)*(2*targetspin+1) )
             avGg = mean(resparsJpi.Gg)
             Rcc .= zero(Rcc[1,1])
-            for iChan = 1:numChan
-                L=0
+            for iRes = 1:numResJpi
+                L=resparsJpi.L[iRes]
                 B=-L
-                # Penetrability, shift factor, phase-shift
-                Pc[iChan,iChan] = penetrat(projmass,targetmass,egrid[iE],ac,L)
-                Sc[iChan,iChan] = shift(projmass,targetmass,egrid[iE],ac,L)
-                phic[iChan,iChan] = phaseshift(projmass,targetmass,egrid[iE],ac,L)
-                # log der
-                Lc[iChan,iChan] = Sc[iChan,iChan] - B + 1im*Pc[iChan,iChan]
-                sinphic2[iChan,iChan] = sin(phic[iChan,iChan])^2
-                sin2phic[iChan,iChan] = sin(2*phic[iChan,iChan])
-                cos2phic[iChan,iChan] = cos(2*phic[iChan,iChan])
-                # shift
-                Sc[iChan,iChan] = 0
-                for jChan = 1:numChan
-                    for iRes = 1:numResJpi
+                for iChan = 1:numChan
+                    # Penetrability, shift factor, phase-shift
+                    Pc[iChan,iChan] = penetrat(projmass,targetmass,egrid[iE],ac,L)
+                    Sc[iChan,iChan] = shift(projmass,targetmass,egrid[iE],ac,L)
+                    phic[iChan,iChan] = phaseshift(projmass,targetmass,egrid[iE],ac,L)
+                    # log der
+
+                    Lc[iChan,iChan] = (Sc[iChan,iChan] - B)*notBSA + 1im*Pc[iChan,iChan]
+                    sinphic2[iChan,iChan] = sin(phic[iChan,iChan])^2
+                    sin2phic[iChan,iChan] = sin(2*phic[iChan,iChan])
+                    cos2phic[iChan,iChan] = cos(2*phic[iChan,iChan])
+                    for jChan = 1:numChan
                         # R-matrix
                         iwidth,jwidth = 0,0
-                        iwidth = sqrt(resparsJpi[iRes,iChan+3]/2/penetrat(projmass,targetmass,resparsJpi.Elam[iRes],ac,L))
-                        jwidth = sqrt(resparsJpi[iRes,jChan+3]/2/penetrat(projmass,targetmass,resparsJpi.Elam[iRes],ac,L))
+                        iwidth = sqrt(resparsJpi[iRes,iChan+skip]/2/penetrat(projmass,targetmass,resparsJpi.Elam[iRes],ac,L))
+                        jwidth = sqrt(resparsJpi[iRes,jChan+skip]/2/penetrat(projmass,targetmass,resparsJpi.Elam[iRes],ac,L))
                         Rcc[iChan,jChan] += iwidth*jwidth/(resparsJpi.Elam[iRes] - egrid[iE] - (1im*avGg)/2.0)
                     end
                 end
-            end # channel-channel
+            end # level, channel-channel
             X = sqrt(Pc) * inv(Lc) * inv(inv(Lc)-Rcc) * Rcc * sqrt(Pc)
             # total
             for iChan = 1:numChan
